@@ -1,6 +1,7 @@
 // URL to your production code when you publish yoru google app script as a web app
 // You will get this URL when you publish your google apps script as a web app
-let prefix="YourWebAppURLHere" // looks like: https://script.google.com/macros/s/AKfycbz90JgtbAjrjz8c8WQGjgy8kM2GtdCAulom8XWOQyGoeX8DXM5XsmUMAcSYSSyZwwNSLq/exec
+let prefix="https://script.google.com/macros/s/AKfycbyRL0khJ4wKxaQ4WRjEgUD2MxMZZS7zvuv-ZsqjcZfiG2Svat228euwNC2iZK1TWKThfA/exec" 
+// looks like: https://script.google.com/macros/s/AKfycbz90JgtbAjrjz8c8WQGjgy8kM2GtdCAulom8XWOQyGoeX8DXM5XsmUMAcSYSSyZwwNSLq/exec
 const dealy_seconds = 4 // how long data validation messages are visible
 
 //example call: file:///C:/Users/Gove/three-tier/datagrid.html?employee
@@ -91,6 +92,15 @@ function change_value(){ // is triggered when a user changes a value in a cell o
             switch(params[2]){                           // params[2] is the field name 
                 case "first_name":                       // validating the first_name field of the employee table  
                     console.log("changing first name")
+                    if (this.value.length < 2){
+                        alert("First name must be at least two characters long")
+                        this.value = ""
+                        return
+                    }
+                    if (this.value != titleCase(this.value)){
+                        this.value = titleCase(this.value)
+                        return
+                    }
                     break
                 default:    
             }
@@ -114,6 +124,14 @@ function change_value(){ // is triggered when a user changes a value in a cell o
                + encodeURIComponent(this.value)
                + "&time=" + Date.now()    
     document.head.appendChild(script)                    // add the script the document heading
+}
+
+function titleCase(str) {
+str = str.toLowerCase().split(' ');
+for (var i = 0; i < str.length; i++) {
+	str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+}
+return str.join(' ');
 }
 
  function handle_message(){ // deals with the data returned after updating (or failing to update) a column value on airtable through google apps script
